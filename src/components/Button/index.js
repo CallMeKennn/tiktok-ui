@@ -4,15 +4,43 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function Button({ to, herf, primary, outline, small, children, large, onClick, ...passProps }) {
+function Button({
+    to,
+    herf,
+    primary,
+    className,
+    disable,
+    rounded,
+    outline,
+    text,
+    small,
+    children,
+    large,
+    leftIcon,
+    rightIcon,
+    onClick,
+    ...passProps
+}) {
     let Comp = 'button';
 
     const classes = cx('wrapper', {
+        [className]: className,
         primary,
         outline,
         small,
         large,
+        text,
+        disable,
+        rounded,
     });
+
+    if (disable) {
+        Object.keys(disable).forEach((key) => {
+            if (key.startsWith('on') && typeof props[key] === 'function') {
+                delete props[key];
+            }
+        });
+    }
 
     const props = {
         onClick,
@@ -28,8 +56,10 @@ function Button({ to, herf, primary, outline, small, children, large, onClick, .
     }
 
     return (
-        <Comp classNames={classes} {...props}>
+        <Comp className={classes} {...props}>
+            {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
             <span>{children}</span>
+            {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
         </Comp>
     );
 }
